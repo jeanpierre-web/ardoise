@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ardoise — app map</title>
+  <style>
+    :root { color-scheme: light; }
+    body { margin: 0; font: 16px/1.45 "Segoe UI", sans-serif; background: #f4efe6; color: #1c1915; }
+    main { max-width: 42rem; margin: 0 auto; padding: 24px 16px 48px; }
+    h1 { font-size: 1.6rem; margin: 0 0 8px; }
+    h2 { font-size: 1.1rem; margin: 28px 0 8px; }
+    p, li { margin: 0 0 8px; }
+    code { font-family: ui-monospace, monospace; font-size: 0.92em; }
+    svg { width: 100%; height: auto; background: #fbf7f1; border: 1px solid #e4d9c8; }
+    a { color: #243036; }
+    details { margin: 8px 0 16px; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Ardoise app map</h1>
+  <p>A credit notebook for one shopkeeper and one phone. This page is a map of the code, not part of the app. It works with scripts disabled.</p>
+
+  <h2>The pieces</h2>
+  <ul>
+    <li><strong>Screen</strong> — <code>src/App.tsx</code> and <code>src/components/</code>. The slate, the sentence box, the correction sheet, the customer page.</li>
+    <li><strong>Reader</strong> — <code>parseEntry</code> in <code>src/lib/parseEntry.ts</code>. Rules on the phone. No key.</li>
+    <li><strong>Notebook</strong> — <code>addEntry</code> and <code>balanceOf</code> in <code>src/lib/ledger.ts</code>, saved by <code>src/lib/storage.ts</code>.</li>
+    <li><strong>Reminder</strong> — <code>reminderText</code> and <code>whatsappHref</code> in <code>src/lib/reminder.ts</code>.</li>
+  </ul>
+
+  <h2>One action</h2>
+  <p>The shopkeeper types a sentence and taps “Read the sentence”. The sheet shows what is still due. “Note it” stores the line.</p>
+  <svg viewBox="0 0 640 150" role="img" aria-label="Sentence goes to parseEntry, then the sheet, then localStorage">
+    <rect x="8" y="40" width="140" height="64" fill="#243036"/>
+    <text x="78" y="76" text-anchor="middle" fill="#f7f1e7" font-size="14">Sentence</text>
+    <path d="M148 72h36" stroke="#1c1915" stroke-width="2"/>
+    <rect x="184" y="40" width="150" height="64" fill="#fbf7f1" stroke="#1c1915"/>
+    <text x="259" y="76" text-anchor="middle" fill="#1c1915" font-size="14">parseEntry</text>
+    <path d="M334 72h36" stroke="#1c1915" stroke-width="2"/>
+    <rect x="370" y="40" width="120" height="64" fill="#fbf7f1" stroke="#8c6a2f" stroke-width="3"/>
+    <text x="430" y="76" text-anchor="middle" fill="#1c1915" font-size="14">Sheet</text>
+    <path d="M490 72h36" stroke="#1c1915" stroke-width="2"/>
+    <rect x="526" y="40" width="106" height="64" fill="#fbf7f1" stroke="#1c1915"/>
+    <text x="579" y="76" text-anchor="middle" fill="#1c1915" font-size="13">localStorage</text>
+  </svg>
+
+  <h2>Reference route</h2>
+  <p>This route was prepared from the finished source. It was not walked live with a learner in the session that built the app.</p>
+  <ol>
+    <li><code>src/App.tsx</code> — <code>readSentence</code> calls <code>parseEntry</code> and opens the sheet. <code>saveDraft</code> calls <code>addEntry</code>.</li>
+    <li><code>src/lib/parseEntry.ts</code> — <code>parseEntry</code> finds the customer, the items, the total, and the amount after “payé” or “paid”.</li>
+    <li><code>src/lib/storage.ts</code> — <code>saveLedger</code> writes the notebook. A reload calls <code>loadLedger</code>.</li>
+  </ol>
+
+  <h2>To change this, start here</h2>
+  <ul>
+    <li>The demo sentence is wrong — <code>src/lib/parseEntry.test.ts</code>, then <code>parseEntry</code>.</li>
+    <li>The balance is wrong — <code>balanceOf</code> in <code>src/lib/ledger.ts</code>.</li>
+    <li>The reminder sounds wrong — <code>reminderText</code> in <code>src/lib/reminder.ts</code>.</li>
+    <li>A label is wrong — <code>src/lib/i18n.ts</code>.</li>
+  </ul>
+
+  <h2>A practice to reuse</h2>
+  <p><code>prd.md</code> asked for a visible result: the sentence “Kofi a pris 2 sacs de riz 15000, payé 5000” shows 10&nbsp;000 still due. <code>src/lib/parseEntry.test.ts</code> checks that result. A grouped amount, “15,000”, first came back as 15. The test failed on the number, which showed that a comma was being treated as a break between items. On another project, write the one screen result you care about as a check before polishing the interface.</p>
+
+  <details>
+    <summary>How to run it again</summary>
+    <p><code>npm install</code>, then <code>npm test</code>, then <code>npm run dev</code>. This map is a snapshot of the source and can drift after later edits.</p>
+  </details>
+</main>
+</body>
+</html>
