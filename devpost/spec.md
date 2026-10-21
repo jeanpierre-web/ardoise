@@ -68,18 +68,17 @@ Optional connected model, local builds only: copy `.env.example` to `.env.local`
 ## Look and Feel
 Carried from `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
 
-- Paper `#F4EFE6`, ink `#1C1915`, soft ink `#3F3A34`, hairline `#E4D9C8`.
-- Slate band `#243036` with chalk `#F7F1E7`. This is the only dark region.
-- Due `#8E2F1A` only on amounts still owed, on paper. Settled `#1B5E45` only when the balance is zero or the label says settled. Brass `#8C6A2F` only as the 4px top edge of the reading sheet.
-- Type: Atkinson Hyperlegible for UI, Fragment Mono for figures. No second display face, no italic word treatment.
-- Density of a counter tool: 16px page padding, 48px controls, the balance figure near 40px on the customer slate.
+- Board `#161C1F`, lifted band `#1E272B`, chalk `#F3EEE4`, muted chalk `#C4BDB0`, hairline `#3A464C`.
+- Terracotta `#E07A4C` only on amounts still owed and on an overdue mark. Settled `#9ED4BC` only when the balance is zero or the label says settled. The reading sheet and the parsed card use a 3px terracotta top edge.
+- Type: Shantell Sans for the wordmark only, Atkinson Hyperlegible for UI, Fragment Mono with tabular figures for FCFA. No italic word treatment.
+- Density of a counter tool: 16px page padding, 44px minimum targets, 48px primary controls, the balance figure at 40px. Motion stays under half a second and is disabled for `prefers-reduced-motion`.
 - Copy tone: short, polite, concrete. French uses apostrophes and shop language ("sur l'ardoise", "Noter").
 - Tailwind can express these tokens. It cannot replace them with its default indigo, dark surfaces, or large rounded cards.
 
 ## Components
 
 ### Sentence reader
-`parseEntry` in `src/lib/parseEntry.ts`. Pure function. Finds a paid amount after payé / paid / versé and similar words, a customer name before a verb or a colon, item chunks with a quantity and a price, and an FCFA integer total. Returns a warning list when the name or the amount is missing.
+`parseEntry` in `src/lib/parseEntry.ts`. Pure function. Finds a paid amount after payé / paid / versé and similar words, a customer name before a verb or a colon, item chunks with a quantity and a price, and an FCFA integer total. Returns a warning list when the name or the amount is missing, and character spans (`src/lib/highlights.ts`) for the customer, the items, the paid amount, and a remaining amount when that number is in the sentence.
 PRD ref: `prd.md > Reading a sentence`.
 
 ### Optional re-reading
@@ -87,7 +86,7 @@ PRD ref: `prd.md > Reading a sentence`.
 PRD ref: `prd.md > Reading a sentence`.
 
 ### Notebook store
-`src/lib/storage.ts` reads and writes one JSON object. `src/lib/ledger.ts` adds a credit, adds a payment, removes a line, sums a customer, and sums what is still due.
+`src/lib/storage.ts` reads and writes one JSON object, including the example-shop flag. `src/lib/ledger.ts` adds a credit, adds a payment, removes a line, sums a customer, and sums what is still due. It sorts overdue customers first: a positive balance whose oldest credit is at least 7 days old. `src/lib/exampleShop.ts` builds the labelled sample. `clearExample` removes those sample customers and keeps anyone added by hand.
 PRD ref: `prd.md > The notebook`, `prd.md > History and payments`.
 
 ### Screen

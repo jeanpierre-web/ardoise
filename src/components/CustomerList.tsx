@@ -1,5 +1,5 @@
 import { EXAMPLES, type Copy } from '../lib/i18n'
-import { balanceOf } from '../lib/ledger'
+import { balanceOf, initials, isOverdue } from '../lib/ledger'
 import { formatFcfa } from '../lib/money'
 import type { Entry, Ledger } from '../lib/types'
 
@@ -18,20 +18,28 @@ function lastLine(entries: Entry[], customerId: string, paymentLabel: string): s
 export function CustomerList(props: {
   ledger: Ledger
   copy: Copy
+  customers: Ledger['customers']
+  freshId: string | null
+  now: Date
   onOpen: (id: string) => void
   onExample: (sentence: string) => void
-  customers: Ledger['customers']
+  onTryShop: () => void
+  onReset: () => void
 }) {
-  const { ledger, copy, onOpen, onExample, customers } = props
+  const { ledger, copy, customers, freshId, now, onOpen, onExample, onTryShop, onReset } = props
+  const example = Boolean(ledger.example)
+
   if (!customers.length) {
     return (
-      <>
-        <div className="empty">
-          <h2>{copy.emptyTitle}</h2>
-          <p>{copy.emptyBody}</p>
-          <div className="rules" aria-hidden="true" />
-          <p className="note">{copy.onPhone}</p>
-        </div>
+      <div className="empty">
+        <h2>{copy.emptyTitle}</h2>
+        <p>{copy.emptyBody}</p>
+        <button type="button" className="btn primary try" data-testid="try-example" onClick={onTryShop}>
+          {copy.tryExample}
+        </button>
+        <p className="note">{copy.tryHint}</p>
+        <p className="note">{copy.onPhone}</p>
+        <p className="or">{copy.orSentence}</p>
         <div className="examples">
           {EXAMPLES.map((sentence) => (
             <button key={sentence} type="button" onClick={() => onExample(sentence)}>
@@ -40,23 +48,44 @@ export function CustomerList(props: {
             </button>
           ))}
         </div>
-      </>
+      </div>
     )
   }
 
   return (
     <>
+      {example ? (
+        <div className="banner" role="status" data-testid="example-banner">
+          <p>{copy.exampleBanner}</p>
+          <button type="button" className="btn line" data-testid="reset-example" onClick={onReset}>
+            {copy.resetExample}
+          </button>
+        </div>
+      ) : null}
       <ul className="rows" data-testid="customer-list">
         {customers.map((customer) => {
           const balance = balanceOf(ledger, customer.id)
+          const late = isOverdue(ledger, customer.id, now)
           const tone = balance > 0 ? 'due' : 'settled'
           const word = balance > 0 ? copy.dueLabel : balance < 0 ? copy.aheadLabel : copy.settledLabel
+          const fresh = ledger.entries.some((entry) => entry.id === freshId && entry.customerId === customer.id)
           return (
             <li key={customer.id}>
-              <button type="button" className="row" data-testid={`customer-${customer.name}`} onClick={() => onOpen(customer.id)}>
-                <span className="name">{customer.name}</span>
+              <button
+                type="button"
+                className={`row${fresh ? ' chalk-in' : ''}`}
+                data-testid={`customer-${customer.name}`}
+                onClick={() => onOpen(customer.id)}
+              >
+                <span className={`avatar ${late ? 'late' : tone}`} aria-hidden="true">
+                  {initials(customer.name)}
+                </span>
+                <span className="name chalk-write">
+                  {customer.example ? <span className="example-kicker">{copy.exampleMark}</span> : null}
+                  {customer.name}
+                </span>
                 <span className={`bal ${tone}`}>{formatFcfa(balance)}</span>
-                <span className="meta">{lastLine(ledger.entries, customer.id, copy.payment)}</span>
+                <span className="meta">{late ? copy.overdue : lastLine(ledger.entries, customer.id, copy.payment)}</span>
                 <span className="bal-word">{word}</span>
               </button>
             </li>

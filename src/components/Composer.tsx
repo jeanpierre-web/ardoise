@@ -1,16 +1,18 @@
 import { useRef, useState } from 'react'
+import { highlightSegments } from '../lib/highlights'
 import type { Copy } from '../lib/i18n'
-import type { Lang } from '../lib/types'
+import type { Highlight, Lang } from '../lib/types'
 import { MicIcon } from './Icons'
 
 export function Composer(props: {
   lang: Lang
   copy: Copy
   value: string
+  spans: Highlight[]
   onChange: (value: string) => void
   onRead: () => void
 }) {
-  const { lang, copy, value, onChange, onRead } = props
+  const { lang, copy, value, spans, onChange, onRead } = props
   const [listening, setListening] = useState(false)
   const [noSpeech, setNoSpeech] = useState(false)
   const recRef = useRef<SpeechRecognitionLike | null>(null)
@@ -58,6 +60,8 @@ export function Composer(props: {
     }
   }
 
+  const parts = highlightSegments(value, spans)
+
   return (
     <form
       className="dock"
@@ -68,12 +72,29 @@ export function Composer(props: {
     >
       <label>
         <span className="composer-label">{copy.sentence}</span>
-        <textarea
-          data-testid="composer"
-          value={value}
-          placeholder={copy.placeholder}
-          onChange={(event) => onChange(event.target.value)}
-        />
+        <span className="composer-field">
+          <span className="mirror" aria-hidden="true">
+            {value ? (
+              parts.map((part, index) =>
+                part.kind ? (
+                  <mark key={index} className={`mark ${part.kind}`}>
+                    {part.text}
+                  </mark>
+                ) : (
+                  <span key={index}>{part.text}</span>
+                ),
+              )
+            ) : (
+              <span className="ghost">{copy.placeholder}</span>
+            )}
+          </span>
+          <textarea
+            data-testid="composer"
+            value={value}
+            aria-label={copy.sentence}
+            onChange={(event) => onChange(event.target.value)}
+          />
+        </span>
       </label>
       {listening ? <p className="hint">{copy.listening}</p> : null}
       {noSpeech ? <p className="hint">{copy.noSpeech}</p> : null}

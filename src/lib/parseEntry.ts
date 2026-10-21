@@ -1,3 +1,4 @@
+import { locateSpans } from './highlights'
 import type { ParsedEntry, ParsedItem } from './types'
 
 const AMOUNT = String.raw`(\d{1,3}(?:[ \u00a0\u202f.,]\d{3})+|\d+(?:[.,]\d{1,2})?)`
@@ -94,6 +95,7 @@ function empty(note: string): ParsedEntry {
     kind: 'credit',
     confidence: 'low',
     warnings: ['empty'],
+    spans: [],
   }
 }
 
@@ -298,7 +300,7 @@ export function parseEntry(text: string): ParsedEntry {
   if (!customer) warnings.push('no-customer')
   if (total === 0 && kind !== 'payment') warnings.push('no-amount')
   if (kind === 'credit' && total > 0 && paid > total) warnings.push('paid-exceeds-total')
-  const confidence = customer && (total > 0 || kind === 'payment') ? 'high' : 'low'
-
-  return { customer, items, total, paid, due, note, kind, confidence, warnings }
+  const confidence: ParsedEntry['confidence'] = customer && (total > 0 || kind === 'payment') ? 'high' : 'low'
+  const reading: Omit<ParsedEntry, 'spans'> = { customer, items, total, paid, due, note, kind, confidence, warnings }
+  return { ...reading, spans: locateSpans(text, reading) }
 }

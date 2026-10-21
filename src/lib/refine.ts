@@ -1,3 +1,4 @@
+import { locateSpans } from './highlights'
 import { parseEntry } from './parseEntry'
 import type { EntryKind, ParsedEntry, ParsedItem, ReaderKind } from './types'
 
@@ -47,7 +48,8 @@ export function fromModelJson(value: unknown, fallback: ParsedEntry): ParsedEntr
   const total = kind === 'payment' ? 0 : asAmount(record.total) ?? (lineSum || fallback.total)
   if (!customer && total === 0 && paid === 0) return null
   const due = total - paid
-  return {
+  const confidence: ParsedEntry['confidence'] = customer && (total > 0 || kind === 'payment') ? 'high' : 'low'
+  const reading: Omit<ParsedEntry, 'spans'> = {
     customer: customer || fallback.customer,
     items: kind === 'payment' ? [] : items,
     total,
@@ -55,9 +57,10 @@ export function fromModelJson(value: unknown, fallback: ParsedEntry): ParsedEntr
     due,
     note: fallback.note,
     kind,
-    confidence: customer && (total > 0 || kind === 'payment') ? 'high' : 'low',
+    confidence,
     warnings: customer ? [] : ['no-customer'],
   }
+  return { ...reading, spans: locateSpans(fallback.note, reading) }
 }
 
 async function promptDevice(sentence: string): Promise<string | null> {

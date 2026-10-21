@@ -22,12 +22,70 @@ function id(): string {
   return crypto.randomUUID()
 }
 
-export function sortedCustomers(ledger: Ledger): Customer[] {
+export const OVERDUE_DAYS = 7
+
+export function initials(name: string): string {
+  const skip = /^(m|mme|mr|mrs|ms|monsieur|madame)$/i
+  const parts = name
+    .split(/\s+/)
+    .map((part) => part.replace(/\./g, ''))
+    .filter((part) => part && !skip.test(part))
+  if (parts.length === 1) return parts[0].slice(0, 2).toLocaleUpperCase('fr') || '?'
+  return parts
+    .slice(0, 2)
+    .map((part) => part[0] ?? '')
+    .join('')
+    .toLocaleUpperCase('fr') || '?'
+}
+
+export function oldestCreditAt(ledger: Ledger, customerId: string): string | null {
+  let oldest: string | null = null
+  for (const entry of ledger.entries) {
+    if (entry.customerId !== customerId || entry.kind !== 'credit') continue
+    if (!oldest || entry.createdAt < oldest) oldest = entry.createdAt
+  }
+  return oldest
+}
+
+export function isOverdue(ledger: Ledger, customerId: string, now = new Date(), days = OVERDUE_DAYS): boolean {
+  if (balanceOf(ledger, customerId) <= 0) return false
+  const oldest = oldestCreditAt(ledger, customerId)
+  if (!oldest) return false
+  const age = now.getTime() - new Date(oldest).getTime()
+  return age >= days * 24 * 60 * 60 * 1000
+}
+
+export function overdueCount(ledger: Ledger, now = new Date()): number {
+  return ledger.customers.filter((customer) => isOverdue(ledger, customer.id, now)).length
+}
+
+export function sortedCustomers(ledger: Ledger, now = new Date()): Customer[] {
   return [...ledger.customers].sort((a, b) => {
+    const aLate = isOverdue(ledger, a.id, now) ? 0 : 1
+    const bLate = isOverdue(ledger, b.id, now) ? 0 : 1
+    if (aLate !== bLate) return aLate - bLate
+    if (aLate === 0) {
+      const at = oldestCreditAt(ledger, a.id) ?? ''
+      const bt = oldestCreditAt(ledger, b.id) ?? ''
+      if (at !== bt) return at.localeCompare(bt)
+    }
     const byBalance = balanceOf(ledger, b.id) - balanceOf(ledger, a.id)
     if (byBalance !== 0) return byBalance
     return a.name.localeCompare(b.name, 'fr')
   })
+}
+
+export function clearExample(ledger: Ledger): Ledger {
+  const sampleIds = new Set(ledger.customers.filter((customer) => customer.example).map((customer) => customer.id))
+  if (!ledger.example && sampleIds.size === 0) return ledger
+  const customers = ledger.customers.filter((customer) => !customer.example)
+  return {
+    version: 1,
+    shopName: ledger.shopName === 'Boutique Adjo' ? '' : ledger.shopName,
+    customers,
+    entries: ledger.entries.filter((entry) => !sampleIds.has(entry.customerId)),
+    example: false,
+  }
 }
 
 export function entriesFor(ledger: Ledger, customerId: string): Entry[] {

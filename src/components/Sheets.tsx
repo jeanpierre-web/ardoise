@@ -16,6 +16,7 @@ export type Draft = {
   checking: boolean
   dirty: boolean
   totalTouched: boolean
+  confidence: 'high' | 'low'
 }
 
 export function ReadSheet(props: {
@@ -67,6 +68,7 @@ export function ReadSheet(props: {
           {formatFcfa(payment ? draft.paid : due)}
         </p>
         <p className="reader">{reader}</p>
+        <p className={`confidence ${draft.confidence}`}>{draft.confidence === 'high' ? copy.confidenceHigh : copy.confidenceLow}</p>
         {draft.warnings.includes('no-customer') || draft.warnings.includes('no-amount') ? <p className="check">{copy.check}</p> : null}
         <label className="field">
           <span>{copy.customer}</span>
@@ -206,6 +208,48 @@ export function PaySheet(props: {
           </button>
         </div>
       </form>
+    </div>
+  )
+}
+
+export function RemindSheet(props: {
+  copy: Copy
+  customer: string
+  amountLabel: string
+  text: string
+  href: string
+  onClose: () => void
+}) {
+  const { copy, customer, amountLabel, text, href, onClose } = props
+  return (
+    <div className="backdrop" onClick={onClose} role="presentation">
+      <div
+        className="sheet"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="remind-title"
+        data-testid="remind-sheet"
+        onClick={(event) => event.stopPropagation()}
+      >
+        <p className="wa-kicker">WhatsApp</p>
+        <h2 id="remind-title">{copy.remind}</h2>
+        <p className="remind-who">
+          {copy.remindTo} {customer}
+        </p>
+        <p className="sheet-due">{amountLabel}</p>
+        <div className="wa-bubble">
+          <p>{text}</p>
+        </div>
+        <p className="hint">{copy.remindNote}</p>
+        <div className="sheet-actions">
+          <button type="button" className="btn line" data-testid="remind-close" onClick={onClose}>
+            {copy.cancel}
+          </button>
+          <a className="btn primary" data-testid="remind-open" href={href}>
+            {copy.remindOpen}
+          </a>
+        </div>
+      </div>
     </div>
   )
 }

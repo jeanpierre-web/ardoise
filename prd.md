@@ -21,8 +21,8 @@ Source: `scope.md > The Unique Kernel`, `scope.md > The Core Loop`, `scope.md > 
 ## Screens and Layout
 Two surfaces, plus two sheets. No extra screens.
 
-- **Notebook.** A dark slate band at the top: the name Ardoise, the French/English switch, and the total still on the slate. Under it, customers as rows sorted by who owes the most. Each row is the name, a short reminder of the last line, and the balance. An empty notebook shows ruled space and three example sentences that only fill the box. They do not save themselves. At the bottom, a sentence box, a dictate button, and "Read the sentence".
-- **Customer.** The same slate, now with a way back, the customer's name, and the balance in large figures. Under it, the history. At the thumb: "Payment received" and "WhatsApp reminder".
+- **Notebook.** The whole screen is the slate: the name Ardoise, the French/English switch, the shop name, and the total still owed in large figures, with a count of customers and how many are overdue. Customers are rows with initials. Overdue names come first. An empty notebook offers one tap that loads a labelled example shop, and a reset that removes that sample. Three example sentences only fill the box. They do not save themselves. At the bottom, a sentence box that marks the parts it has read, a dictate button, and "Read the sentence". A card of the reading appears while typing. The fields can be corrected before saving.
+- **Customer.** The same slate, now with a way back, the customer's name, and the balance in large figures. A settled account shows a cleared state. Under it, the history. At the thumb: "Payment received" and "WhatsApp reminder", which opens a preview of the message before WhatsApp.
 - **Reading sheet.** Slides up over the notebook after a sentence is read. Editable customer, optional WhatsApp number, item lines, paid, and the remaining amount. "Note" saves. "Cancel" drops it.
 - **Shop sheet.** From the slate, a place to set the shop name used in the reminder. Nothing else.
 
@@ -33,12 +33,11 @@ From the brief: warm, premium, not generic, big touch targets, readable in a sho
 
 Direction used for the build, because no separate visual study was available (Mobbin needed a paid plan; Refero needed a sign-in):
 
-- Light paper, so it can be read in sun. Not a dark-mode app.
-- A slate-colored band only at the top, because the product is a slate. Chalk-colored type on that band.
-- Laterite red only for money still owed. Deep green only for a settled balance. A brass edge only as the top rule of the reading sheet, like a shop stamp, not as text.
-- One highly legible sans for the interface (Atkinson Hyperlegible). A mono face only for amounts, like figures on a receipt.
-- Rows separated by hairlines. Cards are not the layout. Corners stay nearly square.
-- Touch targets at least 48px. Amounts are the loudest text on the customer screen.
+- The surface is the slate: charcoal, with chalk-colored type. The owner asked for the ardoise itself, not a paper page.
+- Terracotta only for money still owed and for an overdue mark. A chalk green only for a settled balance.
+- Shantell Sans only for the wordmark. Atkinson Hyperlegible for the interface. Fragment Mono, tabular, for FCFA figures.
+- Rows separated by hairlines. The reading sits on a lifted band. Corners stay nearly square.
+- Touch targets at least 44px, primary controls 48px. Motion is short, and it turns off when the device asks for reduced motion. Amounts are the loudest text on the customer screen.
 - Tone of the copy: plain and polite. No startup slogans. The French should sound like a person at the counter, not a translation of a dashboard.
 
 ## Features and Behavior

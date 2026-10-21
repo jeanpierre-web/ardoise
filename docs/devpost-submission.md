@@ -36,18 +36,18 @@ In Lomé and across West Africa, small shopkeepers sell on credit. A customer sa
 
 ## What it does
 
-581 characters.
+753 characters.
 
 ```
-Ardoise is a mobile web notebook for one shop. The shopkeeper types or dictates one sentence in French or English, such as "Kofi a pris 2 sacs de riz 15000, payé 5000". The app reads the customer, the items, the total, what was paid, and what is still due, in FCFA. The shopkeeper can correct every field, then save. Each customer has a running balance and a history. Noting a payment lowers the balance. One tap opens a polite French or English reminder in WhatsApp, and the shopkeeper sends it. There is no login. After the page has loaded once, the notebook still opens offline.
+Ardoise is a mobile web notebook for one shop. The first screen can load a labelled example shop in one tap, and that sample can be cleared. The shopkeeper types or dictates one sentence in French or English, such as "Kofi a pris 2 sacs de riz 15000, payé 5000". As they type, the customer, the items, the total, and what was paid are marked, and a card shows what is still due. They can correct the fields, then save. Each customer has a running balance and a history. Overdue names sit first. Noting a payment lowers the balance until the account is settled. One tap opens a preview of a polite French or English reminder, then WhatsApp, and the shopkeeper sends it. There is no login. After the page has loaded once, the notebook still opens offline.
 ```
 
 ## How we built it
 
-441 characters.
+517 characters.
 
 ```
-The repository started empty, apart from an MIT license. The Devpost Learn Skill Pack was installed with npx skills add challengepost/learn-ai-basics --all -y, and scope.md, prd.md, and spec.md were written from the brief before the interface. The app is Vite, React, and TypeScript. Tests cover the sentence reader, the balances, and the WhatsApp link. A browser check at 390 pixels walks the loop, including a reload and an offline reload.
+The repository started empty, apart from an MIT license. The Devpost Learn Skill Pack was installed with npx skills add challengepost/learn-ai-basics --all -y, and scope.md, prd.md, and spec.md were written from the brief before the interface. The app is Vite, React, and TypeScript. Tests cover the sentence reader, the live highlights, the example shop, the overdue sort, the balances, and the WhatsApp link. A browser check at 390 pixels walks the loop, including the example shop, a reload, and an offline reload.
 ```
 
 ## Challenges we ran into
@@ -60,10 +60,10 @@ The demo had to read French and English money with no paid API key and no large 
 
 ## Accomplishments that we're proud of
 
-302 characters.
+378 characters.
 
 ```
-The whole loop works on a phone-width screen: one sentence, a correction sheet, a saved balance, a history, a payment, and a WhatsApp reminder in French or English. The notebook survives a reload. After one visit it still opens offline. No account, no server, and no paid key are required for the demo.
+The loop works on a phone-width screen: an example shop you can clear, a sentence that lights up as it is read, a correction sheet, a saved balance, a history, a payment that settles the account, and a WhatsApp preview in French or English. The notebook survives a reload. After one visit it still opens offline. No account, no server, and no paid key are required for the demo.
 ```
 
 ## What we learned

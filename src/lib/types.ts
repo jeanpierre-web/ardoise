@@ -8,6 +8,14 @@ export type ParsedItem = {
 
 export type EntryKind = 'credit' | 'payment'
 
+export type HighlightKind = 'customer' | 'item' | 'total' | 'paid' | 'remaining'
+
+export type Highlight = {
+  kind: HighlightKind
+  start: number
+  end: number
+}
+
 export type ParsedEntry = {
   customer: string
   items: ParsedItem[]
@@ -18,6 +26,8 @@ export type ParsedEntry = {
   kind: EntryKind
   confidence: 'high' | 'low'
   warnings: string[]
+  /** Indexes into the original sentence, not the normalized note. */
+  spans: Highlight[]
 }
 
 export type Customer = {
@@ -25,6 +35,7 @@ export type Customer = {
   name: string
   phone: string
   createdAt: string
+  example?: boolean
 }
 
 export type Entry = {
@@ -43,10 +54,12 @@ export type Ledger = {
   shopName: string
   customers: Customer[]
   entries: Entry[]
+  /** True when the book still holds the labelled sample shop. */
+  example?: boolean
 }
 
 export type ReaderKind = 'rules' | 'device' | 'remote'
 
 export function emptyLedger(): Ledger {
-  return { version: 1, shopName: '', customers: [], entries: [] }
+  return { version: 1, shopName: '', customers: [], entries: [], example: false }
 }

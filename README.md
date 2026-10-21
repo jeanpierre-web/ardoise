@@ -8,21 +8,23 @@ The page is published from `main` by GitHub Actions. If that link 404s, GitHub P
 
 Built for [Build With AI: Basics](https://learn-ai-basics.devpost.com/). The planning documents are [`devpost/scope.md`](devpost/scope.md), [`devpost/prd.md`](devpost/prd.md), and [`devpost/spec.md`](devpost/spec.md). The same three files are also at the repository root. The license is MIT.
 
-The app has no users yet. The empty notebook is the real first screen.
+The app has no users yet. The first screen offers a labelled example shop, and that sample can be cleared.
 
 ## Screenshots
 
 Phone width, 390 pixels.
 
-![Empty notebook](docs/screenshots/01-empty.png)
+![First screen, with one tap to load an example shop](docs/screenshots/01-empty.png)
 
-![A sentence read before it is saved](docs/screenshots/02-reading.png)
+![The example shop: overdue names first, total still owed at the top](docs/screenshots/08-example.png)
+
+![The sentence marked as it is read, before it is saved](docs/screenshots/02-reading.png)
 
 ![Kofi on the slate](docs/screenshots/03-customers.png)
 
-![History and the WhatsApp reminder](docs/screenshots/04-customer.png)
+![WhatsApp reminder preview](docs/screenshots/04-customer.png)
 
-![The same screen in English, after a payment](docs/screenshots/06-settled.png)
+![A settled account](docs/screenshots/06-settled.png)
 
 ## Try it
 
@@ -32,7 +34,9 @@ The demo sentence:
 Kofi a pris 2 sacs de riz 15000, payé 5000
 ```
 
-You should see Kofi, a total of 15 000 F CFA, 5 000 paid, and 10 000 still due. Correct anything, then note it. Open Kofi and tap the WhatsApp reminder. You send the message yourself. **FR / EN** switches the labels and the reminder.
+As you type, Kofi, the rice, 15 000, and the 5 000 already paid are marked in the sentence. A card shows 10 000 still due. Correct anything, then note it. The figure on the slate counts to that balance. Open Kofi and tap the WhatsApp reminder: a preview appears first. You send the message yourself. **FR / EN** switches the labels and the reminder.
+
+On an empty notebook, **Try with an example shop** loads four labelled sample customers. **Clear the example** removes them.
 
 Dictation uses the browser’s speech recognition when it exists. Typing always works.
 
@@ -60,11 +64,11 @@ npx skills add challengepost/learn-ai-basics --all -y
 
 The skills live in `.agents/skills`. Their templates are the shape of `devpost/scope.md`, `devpost/prd.md`, and `devpost/spec.md`, which were written from the project brief before the interface. The build checklist is `devpost/checklist.md`. A map of the code is `devpost/app-map.html`.
 
-The app is Vite, React, and TypeScript. Tailwind supplies the reset and the font tokens. The layout is project CSS: paper, a slate band, laterite only for money still owed, Atkinson Hyperlegible for text, Fragment Mono for amounts. References used for that direction were a balance row (name on the left, amount on the right), a balance that is the screen, and a paper ledger. Mobbin’s search needed a paid plan and Refero needed a sign-in, so those libraries were not available while designing.
+The app is Vite, React, and TypeScript. Tailwind supplies the reset and the font tokens. The layout is project CSS. The screen is the slate: charcoal `#161C1F`, chalk `#F3EEE4`, terracotta `#E07A4C` only for money still owed. Shantell Sans is the wordmark. Atkinson Hyperlegible is the interface. Fragment Mono is the tabular FCFA. The balance is the largest text on the slate. Customer rows carry initials, and overdue names come first. That direction comes from the brief (a chalk slate, a West African accent, not a generic app), from a balance that fills the screen, and from a person row with an initial. Mobbin’s search needed a paid plan and Refero needed a sign-in, so those libraries were not available while designing.
 
 ### The reader
 
-The part that always runs is `parseEntry` in `src/lib/parseEntry.ts`. It is a set of rules for French and English shop sentences. It needs no key, no download, and no network. Unit tests cover the demo sentence, spaced amounts, `15,000` and `15.000`, several items, and a payment on its own.
+The part that always runs is `parseEntry` in `src/lib/parseEntry.ts`. It is a set of rules for French and English shop sentences. It needs no key, no download, and no network. It also returns the character spans used to mark the sentence while it is typed. Unit tests cover the demo sentence, those spans, spaced amounts, `15,000` and `15.000`, several items, a payment on its own, the example shop, and the overdue sort.
 
 Two optional re-readings can update the sheet if the shopkeeper has not started editing:
 
@@ -77,7 +81,7 @@ Data is one JSON object in `localStorage`. A service worker caches the page so a
 
 ## Tests
 
-`npm test` runs Vitest. `scripts/smoke.mjs` opens the preview in Chrome at 390×844, reads the demo sentence, saves it, reloads, checks the WhatsApp link in French and English, notes a payment, and reloads while offline. It needs Playwright and a local Chrome, and it is not part of `npm test`.
+`npm test` runs Vitest. `scripts/smoke.mjs` opens the preview in Chrome at 390×844, loads the example shop and clears it, reads the demo sentence, saves it, reloads, checks the WhatsApp preview in French and English, notes a payment, and reloads while offline. It needs Playwright and a local Chrome, and it is not part of `npm test`.
 
 ## Publishing
 

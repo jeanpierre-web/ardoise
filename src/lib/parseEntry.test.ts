@@ -21,6 +21,18 @@ describe('parseEntry', () => {
     expect(parsed.due).toBe(10000)
     expect(parsed.kind).toBe('credit')
     expect(parsed.confidence).toBe('high')
+    const raw = 'Kofi a pris 2 sacs de riz 15000, payé 5000'
+    const text = (kind: string) =>
+      parsed.spans
+        .filter((span) => span.kind === kind)
+        .map((span) => raw.slice(span.start, span.end))
+        .join(' ')
+    expect(text('customer')).toBe('Kofi')
+    expect(text('item').toLowerCase()).toContain('sacs de riz')
+    expect(text('item')).toContain('15000')
+    expect(text('paid').toLowerCase()).toContain('payé')
+    expect(text('paid')).toContain('5000')
+    expect(parsed.spans.some((span) => span.kind === 'remaining')).toBe(false)
   })
 
   it('reads an English sale', () => {
@@ -68,6 +80,11 @@ describe('parseEntry', () => {
     expect(english.customer).toBe('Kofi')
     expect(english.total).toBe(15000)
     expect(english.paid).toBe(5000)
+    const raw = 'Kofi took 2 bags of rice 15,000, paid 5,000'
+    const paid = english.spans.find((span) => span.kind === 'paid')
+    const item = english.spans.find((span) => span.kind === 'item')
+    expect(paid && raw.slice(paid.start, paid.end)).toContain('5,000')
+    expect(item && raw.slice(item.start, item.end)).toContain('15,000')
 
     const french = parseEntry("Afi a acheté 1 sac de maïs 8000 et 2 bidons d'huile 6000, payé 4000")
     expect(french.customer).toBe('Afi')

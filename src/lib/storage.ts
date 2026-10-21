@@ -19,6 +19,7 @@ export function loadLedger(): Ledger {
       shopName: typeof data.shopName === 'string' ? data.shopName : '',
       customers: data.customers,
       entries: data.entries,
+      example: data.example === true,
     }
   } catch {
     return emptyLedger()
