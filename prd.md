@@ -33,10 +33,8 @@ From the brief: warm, premium, not generic, big touch targets, readable in a sho
 
 Direction used for the build, because no separate visual study was available (Mobbin needed a paid plan; Refero needed a sign-in):
 
-- The surface is the slate: charcoal, with chalk-colored type. The owner asked for the ardoise itself, not a paper page.
-- Terracotta only for money still owed and for an overdue mark. A chalk green only for a settled balance.
-- Shantell Sans only for the wordmark. Atkinson Hyperlegible for the interface. Fragment Mono, tabular, for FCFA figures.
-- Rows separated by hairlines. The reading sits on a lifted band. Corners stay nearly square.
+- A warm cream page. Content sits in large rounded cards. Pink is the accent and the empty-state block. Plum is the text and the settled block. An aqua tile shows total owed and overdue.
+- Manrope for everything. Amounts are the largest type, with “F CFA” as a small label. Primary actions are pink pills. French and English sit in a dark segmented toggle.
 - Touch targets at least 44px, primary controls 48px. Motion is short, and it turns off when the device asks for reduced motion. Amounts are the loudest text on the customer screen.
 - Tone of the copy: plain and polite. No startup slogans. The French should sound like a person at the counter, not a translation of a dashboard.
 

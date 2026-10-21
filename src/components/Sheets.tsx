@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react'
 import type { Copy } from '../lib/i18n'
-import { formatFcfa, parseIntegerInput } from '../lib/money'
+import { formatFcfa, formatGrouped, parseIntegerInput } from '../lib/money'
 import type { ParsedItem, ReaderKind } from '../lib/types'
 
 export type Draft = {
@@ -64,8 +64,9 @@ export function ReadSheet(props: {
         }}
       >
         <h2 id="read-title">{payment ? copy.payment : draft.customer || copy.customer}</h2>
-        <p className={`sheet-due ${due <= 0 ? 'settled' : ''}`} data-testid="due-amount" data-amount={String(payment ? draft.paid : due)}>
-          {formatFcfa(payment ? draft.paid : due)}
+        <p className={`figure sheet-due ${due <= 0 ? 'settled' : ''}`} data-testid="due-amount" data-amount={String(payment ? draft.paid : due)}>
+          <span className="figure-num">{formatGrouped(payment ? draft.paid : due)}</span>
+          <span className="figure-unit">F CFA</span>
         </p>
         <p className="reader">{reader}</p>
         <p className={`confidence ${draft.confidence}`}>{draft.confidence === 'high' ? copy.confidenceHigh : copy.confidenceLow}</p>
@@ -187,6 +188,7 @@ export function PaySheet(props: {
         <label className="field">
           <span>{copy.paymentAmount}</span>
           <input
+            className="pay-big"
             autoFocus
             inputMode="numeric"
             data-testid="pay-amount"
@@ -194,11 +196,18 @@ export function PaySheet(props: {
             onChange={(event) => onAmount(parseIntegerInput(event.target.value))}
           />
         </label>
-        {balance > 0 ? (
-          <button type="button" className="text-btn" onClick={() => onAmount(balance)}>
-            {copy.full} · {formatFcfa(balance)}
-          </button>
-        ) : null}
+        <div className="chips">
+          {[500, 1000, 5000].map((preset) => (
+            <button key={preset} type="button" className="chip" onClick={() => onAmount(preset)}>
+              {new Intl.NumberFormat('fr-FR').format(preset)}
+            </button>
+          ))}
+          {balance > 0 ? (
+            <button type="button" className="chip" aria-label={`${copy.full} ${formatFcfa(balance)}`} onClick={() => onAmount(balance)}>
+              {copy.max}
+            </button>
+          ) : null}
+        </div>
         <div className="sheet-actions">
           <button type="button" className="btn line" onClick={onClose}>
             {copy.cancel}
@@ -236,7 +245,7 @@ export function RemindSheet(props: {
         <p className="remind-who">
           {copy.remindTo} {customer}
         </p>
-        <p className="sheet-due">{amountLabel}</p>
+        <p className="figure sheet-due">{amountLabel}</p>
         <div className="wa-bubble">
           <p>{text}</p>
         </div>

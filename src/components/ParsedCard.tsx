@@ -1,5 +1,5 @@
 import type { Copy } from '../lib/i18n'
-import { formatFcfa, parseIntegerInput } from '../lib/money'
+import { formatGrouped, parseIntegerInput } from '../lib/money'
 import type { ParsedEntry } from '../lib/types'
 
 export type FieldFix = { customer: string; total: number; paid: number }
@@ -59,8 +59,9 @@ export function ParsedCard(props: {
         </label>
         <div className="fact">
           <span>{copy.remaining}</span>
-          <p className={`fact-due ${due > 0 ? 'due' : 'settled'}`} data-testid="live-due" data-amount={String(due)}>
-            {formatFcfa(due)}
+          <p className={`fact-due figure ${due > 0 ? 'due' : 'settled'}`} data-testid="live-due" data-amount={String(due)}>
+            <span className="figure-num">{formatGrouped(due)}</span>
+            <span className="figure-unit">F CFA</span>
           </p>
         </div>
       </div>

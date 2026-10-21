@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { addEntry, balanceOf, clearExample, initials, isOverdue, removeEntry, sortedCustomers, stillDue } from './ledger'
+import { addEntry, balanceOf, clearExample, initials, isOverdue, overdueAmount, removeEntry, sortedCustomers, stillDue } from './ledger'
 import { emptyLedger } from './types'
 
 describe('ledger', () => {
@@ -65,6 +65,7 @@ describe('ledger', () => {
       new Date(now.getTime() - 12 * 24 * 60 * 60 * 1000).toISOString(),
     )
     expect(sortedCustomers(ledger, now).map((customer) => customer.name)).toEqual(['Kofi', 'Ama', 'Yao'])
+    expect(overdueAmount(ledger, now)).toBe(5500)
     const yao = ledger.customers.find((customer) => customer.name === 'Yao')
     expect(yao && isOverdue(ledger, yao.id, now)).toBe(false)
     expect(initials('Kofi')).toBe('KO')

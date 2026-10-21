@@ -59,6 +59,13 @@ export function overdueCount(ledger: Ledger, now = new Date()): number {
   return ledger.customers.filter((customer) => isOverdue(ledger, customer.id, now)).length
 }
 
+export function overdueAmount(ledger: Ledger, now = new Date()): number {
+  return ledger.customers.reduce((sum, customer) => {
+    if (!isOverdue(ledger, customer.id, now)) return sum
+    return sum + Math.max(0, balanceOf(ledger, customer.id))
+  }, 0)
+}
+
 export function sortedCustomers(ledger: Ledger, now = new Date()): Customer[] {
   return [...ledger.customers].sort((a, b) => {
     const aLate = isOverdue(ledger, a.id, now) ? 0 : 1

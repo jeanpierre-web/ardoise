@@ -10,9 +10,11 @@ function when(iso: string, lang: Lang): string {
 
 function ClearedMark() {
   return (
-    <svg className="cleared-mark" viewBox="0 0 48 48" aria-hidden="true">
-      <circle cx="24" cy="24" r="16" fill="none" stroke="currentColor" strokeWidth="1.75" />
-      <path className="cleared-check" d="M16 24.5 21.5 30 33 18" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg className="rings" viewBox="0 0 132 48" aria-hidden="true">
+      <circle cx="24" cy="24" r="16" />
+      <circle cx="44" cy="24" r="16" />
+      <circle cx="64" cy="24" r="16" />
+      <circle cx="84" cy="24" r="16" />
     </svg>
   )
 }
@@ -29,9 +31,11 @@ export function CustomerView(props: {
   return (
     <section>
       {settled && entries.length ? (
-        <div className="cleared" data-testid="cleared">
-          <ClearedMark />
-          <p>{copy.cleared}</p>
+        <div className="success" data-testid="cleared">
+          <div className="success-inner">
+            <h2>{copy.cleared}</h2>
+            <ClearedMark />
+          </div>
         </div>
       ) : null}
       <ul className="history">

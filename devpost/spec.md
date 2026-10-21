@@ -68,10 +68,10 @@ Optional connected model, local builds only: copy `.env.example` to `.env.local`
 ## Look and Feel
 Carried from `prd.md > Look and Feel` and `scope.md > Inspiration & Identity`.
 
-- Board `#161C1F`, lifted band `#1E272B`, chalk `#F3EEE4`, muted chalk `#C4BDB0`, hairline `#3A464C`.
-- Terracotta `#E07A4C` only on amounts still owed and on an overdue mark. Settled `#9ED4BC` only when the balance is zero or the label says settled. The reading sheet and the parsed card use a 3px terracotta top edge.
-- Type: Shantell Sans for the wordmark only, Atkinson Hyperlegible for UI, Fragment Mono with tabular figures for FCFA. No italic word treatment.
-- Density of a counter tool: 16px page padding, 44px minimum targets, 48px primary controls, the balance figure at 40px. Motion stays under half a second and is disabled for `prefers-reduced-motion`.
+- Page `#EFEDE6`, cards `#FFFCF8`, plum text `#45132F`, muted plum `#6A3A52`, hairline `#EADFEA`.
+- Pink `#FBB2F0` for the primary pill and the empty-state block. Soft pink `#FBDDF6` for chips and avatars. Aqua `#C9F1F6` for the total-owed / overdue tile. A settled account uses a plum block with a white inner card and pink line-art circles.
+- Type: Manrope only. Amounts are large, tight, and split from the small “F CFA” label. No italic word treatment.
+- Density: 16px page padding, 44px minimum targets, 48px primary pills, balance figures from 34px in the stats tile to 56px on a customer. Motion stays under half a second and is disabled for `prefers-reduced-motion`.
 - Copy tone: short, polite, concrete. French uses apostrophes and shop language ("sur l'ardoise", "Noter").
 - Tailwind can express these tokens. It cannot replace them with its default indigo, dark surfaces, or large rounded cards.
 

@@ -7,7 +7,7 @@ import { ParsedCard, type FieldFix } from './components/ParsedCard'
 import { PaySheet, ReadSheet, RemindSheet, ShopSheet, type Draft } from './components/Sheets'
 import { exampleLedger } from './lib/exampleShop'
 import { t } from './lib/i18n'
-import { addEntry, balanceOf, clearExample, entriesFor, overdueCount, removeEntry, setShopName, sortedCustomers, stillDue } from './lib/ledger'
+import { addEntry, balanceOf, clearExample, entriesFor, overdueAmount, overdueCount, removeEntry, setShopName, sortedCustomers, stillDue } from './lib/ledger'
 import { formatFcfa } from './lib/money'
 import { parseEntry } from './lib/parseEntry'
 import { deviceModelPresent, maybeRefine, modelConfigured } from './lib/refine'
@@ -140,7 +140,6 @@ export function App() {
   const homeDue = stillDue(ledger)
   const late = overdueCount(ledger, nowRef.current)
   const headerValue = customer ? balance : homeDue
-  const tone = customer ? (balance > 0 ? 'due' : 'settled') : homeDue > 0 ? 'due' : 'plain'
   const kicker = customer
     ? balance > 0
       ? copy.dueLabel
@@ -148,11 +147,6 @@ export function App() {
         ? copy.aheadLabel
         : copy.settledLabel
     : copy.still
-  const meta = customer
-    ? ''
-    : customers.length
-      ? `${customers.length} ${copy.customers}${late ? ` · ${late} ${copy.overdueInline}` : ''}`
-      : ''
 
   function openCustomer(id: string) {
     setRemindOpen(false)
@@ -251,9 +245,10 @@ export function App() {
         onLang={setLang}
         title={customer?.name ?? 'Ardoise'}
         value={headerValue}
-        tone={tone}
+        lateAmount={overdueAmount(ledger, nowRef.current)}
+        lateCount={late}
+        showStats={!customer && customers.length > 0}
         kicker={kicker}
-        meta={meta}
         shopLabel={ledger.shopName}
         onBack={customer ? closeCustomer : undefined}
         onShop={customer ? undefined : () => setShopOpen(true)}

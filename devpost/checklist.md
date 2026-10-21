@@ -69,3 +69,4 @@ Activity mode: reference recap
 - Thousand separators are protected before the sentence is split on commas — `15,000` was read as 15 because the comma was treated as a gap between items. The demo sentence’s acceptance test is what showed it.
 - Item amount columns got visible labels (qty, item, amount) after the 390px pass, and the small “Example” label moved from brass `#8C6A2F` (contrast 4.35 on paper) to `#6A4E16`.
 - The owner asked for a less generic screen. The surface is now the slate (charcoal, chalk wordmark, terracotta only for what is still owed). A labelled example shop loads in one tap. The sentence is marked as it is typed. Overdue customers sort first. The WhatsApp reminder opens a preview. Motion respects `prefers-reduced-motion`.
+- A later pass matches a soft fintech reference: cream page, rounded cards, pink pills, plum text, an aqua total/overdue tile, and a settled card with line-art circles. No reference brand names are used.

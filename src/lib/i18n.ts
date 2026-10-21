@@ -3,6 +3,7 @@ import type { Lang } from './types'
 export const copy = {
   fr: {
     still: 'Sur l’ardoise',
+    totalOwed: 'Total dû',
     dueLabel: 'Reste dû',
     settledLabel: 'Réglé',
     aheadLabel: 'Avance',
@@ -64,6 +65,7 @@ export const copy = {
     history: 'Historique',
     paymentAmount: 'Montant reçu',
     full: 'Tout le reste',
+    max: 'Max',
     notePayment: 'Noter le paiement',
     removeItem: 'Retirer',
     sentence: 'Phrase',
@@ -73,6 +75,7 @@ export const copy = {
   },
   en: {
     still: 'On the slate',
+    totalOwed: 'Total owed',
     dueLabel: 'Still due',
     settledLabel: 'Settled',
     aheadLabel: 'Ahead',
@@ -134,6 +137,7 @@ export const copy = {
     history: 'History',
     paymentAmount: 'Amount received',
     full: 'The full balance',
+    max: 'Max',
     notePayment: 'Note the payment',
     removeItem: 'Remove',
     sentence: 'Sentence',
